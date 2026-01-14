@@ -1,0 +1,15 @@
+/* Additional custom styles if needed */
+/* The component uses Tailwind CSS classes, but you can add custom styles here */
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1.4s infinite;
+}

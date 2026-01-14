@@ -1,0 +1,59 @@
+import { DatabaseProvider } from '../database/DatabaseService';
+import { KnowledgeResult } from '../../agent/types';
+
+export class KnowledgeService {
+  constructor(private dbService: DatabaseProvider) {}
+
+  /**
+   * Search knowledge base for relevant articles
+   */
+  async search(
+    user_id: string,
+    query: string,
+    limit: number = 3
+  ): Promise<KnowledgeResult[]> {
+    // For MVP, use simple database search
+    const results = await this.dbService.searchKnowledge(
+      user_id,
+      query,
+      limit
+    );
+
+    // Convert to KnowledgeResult format
+    return results.map(r => ({
+      id: r.id,
+      title: r.title,
+      content: r.content,
+      relevance_score: 1.0 // Simple - no scoring yet
+    }));
+  }
+
+  /**
+   * Extract keywords from query (simple implementation)
+   */
+  private extractKeywords(query: string): string[] {
+    // Remove common words
+    const stopWords = new Set([
+      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at',
+      'to', 'for', 'of', 'with', 'by', 'from', 'how', 'what',
+      'when', 'where', 'who', 'why', 'is', 'are', 'was', 'were'
+    ]);
+
+    return query
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(word => word.length > 2 && !stopWords.has(word));
+  }
+
+  /**
+   * Check if query should trigger KB search
+   */
+  shouldSearchKnowledge(query: string): boolean {
+    const questionWords = ['how', 'what', 'when', 'where', 'why', 'can'];
+    const lowerQuery = query.toLowerCase();
+    
+    // Search if it's a question or if it mentions specific keywords
+    return questionWords.some(word => lowerQuery.includes(word)) ||
+           query.includes('?');
+  }
+}
