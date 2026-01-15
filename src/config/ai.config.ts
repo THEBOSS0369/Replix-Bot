@@ -28,7 +28,7 @@ export const AI_CONFIG: AIConfig = {
   provider: 'gemini',
 
   gemini: {
-    model: 'gemini-2.0-flash',
+    model: 'gemini-flash-latest',
   },
   openai: {
     model: 'gpt-4o-mini',
