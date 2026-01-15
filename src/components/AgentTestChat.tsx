@@ -223,7 +223,7 @@ export function AgentTestChat() {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyPress={handleKeyPress}
                         placeholder="Message Agent..."
-                        className="w-full bg-transparent border-0 focus:ring-0 px-5 py-4 min-h-[60px] max-h-[200px] resize-none text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500"
+                        className="w-full bg-transparent border-0 focus:ring-0 focus:outline-none px-5 py-4 min-h-[60px] max-h-[200px] resize-none text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500"
                         rows={1}
                         disabled={isLoading}
                         onInput={(e) => {
