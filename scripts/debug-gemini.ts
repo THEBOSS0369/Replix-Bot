@@ -17,11 +17,10 @@ const genAI = new GoogleGenerativeAI(apiKey);
 
 async function testModel() {
   try {
-    // Manually specifying the model to match what we just set in config, or we could import it. 
-    // Let's test the specific model we just chose.
-    const modelName = 'gemini-2.0-flash';
+    const modelName = 'gemini-flash-latest';
     console.log(`Testing model: ${modelName}...`);
     
+    // Use the model directly
     const model = genAI.getGenerativeModel({ model: modelName });
     const result = await model.generateContent('Say "Hello, World!" if you can hear me.');
     const response = await result.response;
@@ -29,7 +28,6 @@ async function testModel() {
     
   } catch (error: any) {
     console.error('Error testing model:', error.message);
-    
     if (error.response) {
         console.error('Response status:', error.response.status);
     }
