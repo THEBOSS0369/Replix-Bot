@@ -1,21 +1,36 @@
 import { DatabaseProvider } from '../database/DatabaseService';
 import { KnowledgeResult } from '../../agent/types';
+import { extractMeaningfulKeywords, buildSafeSearchPattern } from '../../utils/sanitizer';
 
 export class KnowledgeService {
   constructor(private dbService: DatabaseProvider) {}
 
   /**
-   * Search knowledge base for relevant articles
+   * Search knowledge base for relevant articles using smart keyword extraction
    */
   async search(
     user_id: string,
     query: string,
     limit: number = 3
   ): Promise<KnowledgeResult[]> {
-    // For MVP, use simple database search
+    // Extract meaningful keywords from the query
+    const keywords = extractMeaningfulKeywords(query);
+    
+    if (keywords.length === 0) {
+      return []; // No valid keywords
+    }
+
+    // Build safe search pattern (max 7 keywords)
+    const searchPattern = buildSafeSearchPattern(keywords, 7);
+    
+    if (!searchPattern) {
+      return []; // Invalid pattern
+    }
+
+    // Search database with keyword pattern
     const results = await this.dbService.searchKnowledge(
       user_id,
-      query,
+      searchPattern,
       limit
     );
 
